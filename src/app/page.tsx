@@ -2,6 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
+import { createClient } from "../lib/supabase/client";
+
+const supabaseConfigured = Boolean(
+  process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+);
 
 // Interface Definitions
 interface Transaction {
@@ -89,6 +94,10 @@ const PLAN_GROUPS = [
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [userId, setUserId] = useState("");
+  const [cloudReady, setCloudReady] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [budgets, setBudgets] = useState<Budget[]>(DEFAULT_BUDGETS);
   
@@ -107,6 +116,28 @@ export default function Home() {
   // Hydration safety check
   useEffect(() => {
     setMounted(true);
+    if (supabaseConfigured) {
+      const supabase = createClient();
+      supabase.auth.getUser().then(({ data }) => {
+        if (!data.user) {
+          window.location.href = "/auth";
+          return;
+        }
+        setUserEmail(data.user.email || "");
+        setUserId(data.user.id);
+        supabase.from("budget_data").select("transactions, budgets").eq("user_id", data.user.id).maybeSingle().then(({ data: budgetData }) => {
+          if (budgetData) {
+            setTransactions(Array.isArray(budgetData.transactions) ? budgetData.transactions as Transaction[] : []);
+            setBudgets(Array.isArray(budgetData.budgets) ? budgetData.budgets as Budget[] : DEFAULT_BUDGETS);
+          }
+          setCloudReady(true);
+        });
+        setAuthChecked(true);
+      });
+    } else {
+      setAuthChecked(true);
+      setCloudReady(true);
+    }
     const storedTx = localStorage.getItem("gravity_transactions");
     const storedBudgets = localStorage.getItem("gravity_budgets");
     
@@ -133,16 +164,29 @@ export default function Home() {
 
   // Save to local storage when state changes
   useEffect(() => {
-    if (mounted) {
+    if (mounted && cloudReady && !supabaseConfigured) {
       localStorage.setItem("gravity_transactions", JSON.stringify(transactions));
     }
-  }, [transactions, mounted]);
+  }, [transactions, mounted, cloudReady]);
 
   useEffect(() => {
-    if (mounted) {
+    if (mounted && cloudReady && !supabaseConfigured) {
       localStorage.setItem("gravity_budgets", JSON.stringify(budgets));
     }
-  }, [budgets, mounted]);
+  }, [budgets, mounted, cloudReady]);
+
+  useEffect(() => {
+    if (!mounted || !cloudReady || !supabaseConfigured || !userId) return;
+    const timeout = window.setTimeout(() => {
+      createClient().from("budget_data").upsert({
+        user_id: userId,
+        transactions,
+        budgets,
+        updated_at: new Date().toISOString(),
+      });
+    }, 400);
+    return () => window.clearTimeout(timeout);
+  }, [transactions, budgets, mounted, cloudReady, userId]);
 
   if (!mounted) {
     return (
@@ -153,6 +197,26 @@ export default function Home() {
       </div>
     );
   }
+
+  if (!supabaseConfigured) {
+    return (
+      <div className={styles.container}>
+        <div className={`${styles.glassPanel} ${styles.emptyState}`}>
+          <h2>Supabase setup required</h2>
+          <p>Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY in Vercel, then reload.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!authChecked) {
+    return <div className={styles.container}><div className={styles.emptyState}><p>Checking your secure session…</p></div></div>;
+  }
+
+  const handleSignOut = async () => {
+    await createClient().auth.signOut();
+    window.location.href = "/auth";
+  };
 
   // Action handlers
   const handleAddTransaction = (e: React.FormEvent) => {
@@ -356,6 +420,8 @@ export default function Home() {
           <p>Secure personal budget manager stored completely offline</p>
         </div>
         <div className={styles.actions}>
+          <span className={styles.userBadge}>{userEmail}</span>
+          <button className={styles.iconButton} onClick={handleSignOut}>Sign out</button>
           <button className={styles.iconButton} onClick={handleExportData}>
             <span>📤</span> Export
           </button>
