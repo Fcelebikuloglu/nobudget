@@ -472,12 +472,9 @@ export default function Home() {
           <p>Your money, made easy.</p>
         </div>
         <div className={styles.actions}>
-          <div className={styles.headerTools}>
-            <button className={styles.headerTool} onClick={() => window.location.reload()} aria-label="Refresh dashboard" title="Refresh dashboard">↻</button>
-          </div>
           <div className={styles.profileMenuWrap}>
             <button className={styles.profileButton} onClick={() => setProfileOpen(!profileOpen)} aria-label="Open account menu" aria-expanded={profileOpen}>
-              <span className={styles.accountAvatar}>👤</span><span className={styles.profileLabel}>{copy.profile}</span>
+              <span className={styles.accountAvatar}>👤</span>
             </button>
             {profileOpen && <div className={styles.profileMenu}>
               <div className={styles.profileMenuEmail}>{userEmail}</div>
