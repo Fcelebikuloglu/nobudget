@@ -119,6 +119,7 @@ export default function Home() {
   const [category, setCategory] = useState(CATEGORIES[1]); // Food
   const [type, setType] = useState<"income" | "expense">("expense");
   const [date, setDate] = useState("");
+  const [showEntryModal, setShowEntryModal] = useState(false);
   
   // Filter & Search State
   const [searchTerm, setSearchTerm] = useState("");
@@ -280,6 +281,7 @@ export default function Home() {
     // Reset Form (keep date and type for consecutive entries if needed, or reset standard)
     setDescription("");
     setAmount("");
+    setShowEntryModal(false);
   };
 
   const handleDeleteTransaction = (id: string) => {
@@ -568,14 +570,14 @@ export default function Home() {
       {syncError && <div className={styles.syncError} role="alert">⚠ {syncError}</div>}
 
       <section className={styles.quickActions} aria-label={copy.quickActions}>
-        <a className={`${styles.quickAction} ${styles.quickExpense}`} href="#logger" onClick={() => setType("expense")}>
+        <button className={`${styles.quickAction} ${styles.quickExpense}`} onClick={() => { setType("expense"); setShowEntryModal(true); }}>
           <span className={styles.quickIcon}>−</span>
           <span><strong>{copy.addExpense.charAt(0).toUpperCase() + copy.addExpense.slice(1)}</strong><small>{copy.expenses}</small></span>
-        </a>
-        <a className={`${styles.quickAction} ${styles.quickIncome}`} href="#logger" onClick={() => setType("income")}>
+        </button>
+        <button className={`${styles.quickAction} ${styles.quickIncome}`} onClick={() => { setType("income"); setShowEntryModal(true); }}>
           <span className={styles.quickIcon}>+</span>
           <span><strong>{copy.addIncome.charAt(0).toUpperCase() + copy.addIncome.slice(1)}</strong><small>{copy.income}</small></span>
-        </a>
+        </button>
       </section>
 
       {/* Layout Split */}
@@ -583,8 +585,9 @@ export default function Home() {
         {/* Left Column: Logger and Category Visualizers */}
         <div className={styles.leftColumn}>
           {/* Logger Panel */}
-          <section id="logger" className={styles.glassPanel}>
-            <h3 className={styles.panelTitle}>{copy.add}</h3>
+          {showEntryModal && <div className={styles.modalBackdrop} onClick={() => setShowEntryModal(false)}>
+          <section id="logger" className={`${styles.glassPanel} ${styles.entryModal}`} onClick={(event) => event.stopPropagation()}>
+            <div className={styles.modalTitleRow}><h3 className={styles.panelTitle}>{copy.add}</h3><button type="button" className={styles.closeButton} onClick={() => setShowEntryModal(false)} aria-label="Close">×</button></div>
             <p className={styles.panelIntro}>{copy.intro}</p>
             <form onSubmit={handleAddTransaction} className={styles.form}>
               <div className={styles.inputGroup}>
@@ -677,6 +680,7 @@ export default function Home() {
               </button>
             </form>
           </section>
+          </div>}
 
           {/* SVG Doughnut Chart Card */}
           <section className={styles.glassPanel}>
