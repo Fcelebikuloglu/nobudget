@@ -26,14 +26,18 @@ export default function AuthPage() {
 
     const supabase = createClient();
     if (mode === "signup") {
-      const { data, error: signupError } = await supabase.auth.signUp({ email, password });
+      const { data, error: signupError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      });
       if (signupError) {
         setError(signupError.message);
         setLoading(false);
         return;
       }
       if (!data.session) {
-        setSuccess("Account created successfully. Check your email to confirm your account, then sign in.");
+        setSuccess("Account created successfully. Check your email and tap the confirmation link to finish signing in.");
         setMode("signin");
         setLoading(false);
         return;
