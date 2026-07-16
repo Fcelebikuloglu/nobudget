@@ -454,21 +454,21 @@ export default function Home() {
           <h2 className={styles.cardValue} style={{ color: "var(--success)" }}>
             +{formatCurrency(totalIncome)}
           </h2>
-          <span className={styles.cardMeta}>Logged inflows</span>
+          <span className={styles.cardMeta}>Money coming in</span>
         </div>
         <div className={`${styles.glassPanel} ${styles.card} ${styles.expenseCard}`}>
           <span className={styles.cardLabel}>Total Expenses</span>
           <h2 className={styles.cardValue} style={{ color: "var(--danger)" }}>
             -{formatCurrency(totalExpenses)}
           </h2>
-          <span className={styles.cardMeta}>Logged outflows</span>
+          <span className={styles.cardMeta}>Money going out</span>
         </div>
         <div className={`${styles.glassPanel} ${styles.card} ${styles.balanceCard}`}>
           <span className={styles.cardLabel}>Net Balance</span>
           <h2 className={styles.cardValue} style={{ color: netBalance >= 0 ? "var(--text-primary)" : "var(--danger)" }}>
             {netBalance >= 0 ? "" : "-"}{formatCurrency(Math.abs(netBalance))}
           </h2>
-          <span className={styles.cardMeta}>Remaining margin</span>
+          <span className={styles.cardMeta}>Left to use</span>
         </div>
       </section>
 
@@ -477,7 +477,7 @@ export default function Home() {
         <div className={styles.planHeading}>
           <div>
             <h3 className={styles.panelTitle}>50 / 30 / 20 plan</h3>
-            <p className={styles.planIntro}>A simple guide for every dollar of your take-home income.</p>
+            <p className={styles.planIntro}>A simple guide for every euro of your take-home income.</p>
           </div>
           <span className={styles.planIncome}>Based on {formatCurrency(planTotal, 0)} income</span>
         </div>
@@ -614,7 +614,7 @@ export default function Home() {
 
           {/* SVG Doughnut Chart Card */}
           <section className={styles.glassPanel}>
-            <h3 className={styles.panelTitle}>Expenses by Category</h3>
+            <h3 className={styles.panelTitle}>Where your money goes</h3>
             <div className={styles.chartBox}>
               {renderDonutChart()}
             </div>
@@ -640,7 +640,7 @@ export default function Home() {
         <div className={styles.rightColumn}>
           {/* Budget progress bars */}
           <section className={styles.glassPanel}>
-            <h3 className={styles.panelTitle}>Budget Limits</h3>
+            <h3 className={styles.panelTitle}>Your spending guide</h3>
             <div className={styles.budgetTracker}>
               {budgets.map((b) => {
                 const spent = categoryTotals[b.category] || 0;
@@ -676,9 +676,9 @@ export default function Home() {
           {/* History tracker */}
           <section className={styles.glassPanel}>
             <div className={styles.panelTitle}>
-              <span>Transaction History</span>
+              <span>Your activity</span>
               <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "normal" }}>
-                {filteredTransactions.length} items
+                {filteredTransactions.length} {filteredTransactions.length === 1 ? "entry" : "entries"}
               </span>
             </div>
 
