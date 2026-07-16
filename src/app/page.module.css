@@ -2,6 +2,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 42px 28px 64px;
+  padding-top: 126px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -23,13 +24,17 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 15;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(100% - 56px), 1224px);
   padding: 12px 0;
-  background: rgba(17, 24, 39, .82);
+  background: rgba(17, 24, 39, .94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(196,181,253,.14);
 }
 
 .titleArea h1 {
@@ -128,8 +133,8 @@
   .balanceHero { min-height: 132px; margin-top: 14px; padding: 22px; border-radius: 20px; }
   .heroAmount { font-size: 2.35rem; }
   .heroSparkles { font-size: 2.2rem; }
-  .container { padding: 22px 14px 40px; gap: 16px; }
-  .header { flex-direction: column; align-items: stretch; gap: 14px; }
+  .container { padding: 22px 14px 40px; padding-top: 156px; gap: 16px; }
+  .header { width: calc(100% - 28px); flex-direction: column; align-items: stretch; gap: 14px; }
   .titleArea h1 { font-size: 1.5rem; }
   .titleArea p { font-size: 0.75rem; max-width: none; }
   .actions { gap: 7px; flex-wrap: wrap; }
