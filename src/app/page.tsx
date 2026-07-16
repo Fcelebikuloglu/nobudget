@@ -544,12 +544,23 @@ export default function Home() {
 
       {syncError && <div className={styles.syncError} role="alert">⚠ {syncError}</div>}
 
+      <section className={styles.quickActions} aria-label="Quick actions">
+        <a className={`${styles.quickAction} ${styles.quickExpense}`} href="#logger" onClick={() => setType("expense")}>
+          <span className={styles.quickIcon}>−</span>
+          <span><strong>{copy.addExpense.charAt(0).toUpperCase() + copy.addExpense.slice(1)}</strong><small>{copy.expenses}</small></span>
+        </a>
+        <a className={`${styles.quickAction} ${styles.quickIncome}`} href="#logger" onClick={() => setType("income")}>
+          <span className={styles.quickIcon}>+</span>
+          <span><strong>{copy.addIncome.charAt(0).toUpperCase() + copy.addIncome.slice(1)}</strong><small>{copy.income}</small></span>
+        </a>
+      </section>
+
       {/* Layout Split */}
       <main className={styles.mainLayout}>
         {/* Left Column: Logger and Category Visualizers */}
         <div className={styles.leftColumn}>
           {/* Logger Panel */}
-          <section className={styles.glassPanel}>
+          <section id="logger" className={styles.glassPanel}>
             <h3 className={styles.panelTitle}>{copy.add}</h3>
             <p className={styles.panelIntro}>{copy.intro}</p>
             <form onSubmit={handleAddTransaction} className={styles.form}>
