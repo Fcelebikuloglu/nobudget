@@ -172,9 +172,9 @@ export default function Home() {
 
   const formatMoney = (value: number, fractionDigits = 2) => formatCurrency(value, currency, language, fractionDigits);
   const copy = language === "tr" ? {
-    income: "Gelir", expenses: "Harcamalar", balance: "Bakiye", plan: "50 / 30 / 20 planı", add: "Bir şey ekle", addIncome: "gelir", addExpense: "harcama", activity: "Hareketlerin", spendingGuide: "Harcama rehberin", moneyIn: "Gelen para", moneyOut: "Giden para", leftToUse: "Kullanılabilir", language: "Dil", currency: "Para birimi", signOut: "Çıkış yap", save: "Kaydet", intro: "Birkaç dokunuşla tamam.", description: "Açıklama", amount: "Tutar", date: "Tarih", category: "Kategori", whereMoneyGoes: "Paran nereye gidiyor", used: "kullanıldı", of: " / ", remaining: "kaldı", over: "hedef aşıldı", addIncomePrompt: "Gelir ekleyince hedeflerin hazır", noTransactions: "Henüz hareket yok", moneyStory: "Hazır olduğunda ilkini ekle"
+    income: "Gelir", expenses: "Harcamalar", balance: "Bakiye", plan: "50 / 30 / 20 planı", add: "Bir şey ekle", addIncome: "gelir", addExpense: "harcama", activity: "Hareketlerin", spendingGuide: "Harcama rehberin", moneyIn: "Gelen para", moneyOut: "Giden para", leftToUse: "Kullanılabilir", language: "Dil", currency: "Para birimi", signOut: "Çıkış yap", save: "Kaydet", intro: "Birkaç dokunuşla tamam.", description: "Açıklama", amount: "Tutar", date: "Tarih", category: "Kategori", whereMoneyGoes: "Paran nereye gidiyor", used: "kullanıldı", of: " / ", remaining: "kaldı", over: "hedef aşıldı", addIncomePrompt: "Gelir ekleyince hedeflerin hazır", noTransactions: "Henüz hareket yok", moneyStory: "Hazır olduğunda ilkini ekle", quickActions: "Hızlı işlemler", entry: "kayıt", entries: "kayıt", search: "Açıklamada ara...", allTypes: "Tüm türler", allCategories: "Tüm kategoriler", delete: "Kaydı sil", exampleIncome: "ör. Aylık maaş", exampleExpense: "ör. Kahve, kira, market"
   } : {
-    income: "Income", expenses: "Expenses", balance: "Balance", plan: "50 / 30 / 20 plan", add: "Add something", addIncome: "income", addExpense: "expense", activity: "Your activity", spendingGuide: "Your spending guide", moneyIn: "Money coming in", moneyOut: "Money going out", leftToUse: "Left to use", language: "Language", currency: "Currency", signOut: "Sign out", save: "Save", intro: "Just a few taps.", description: "Description", amount: "Amount", date: "Date", category: "Category", whereMoneyGoes: "Where your money goes", used: "used", of: " of ", remaining: "remaining", over: "over target", addIncomePrompt: "Add income and your targets are ready", noTransactions: "Nothing here yet", moneyStory: "Your first one can go here"
+    income: "Income", expenses: "Expenses", balance: "Balance", plan: "50 / 30 / 20 plan", add: "Add something", addIncome: "income", addExpense: "expense", activity: "Your activity", spendingGuide: "Your spending guide", moneyIn: "Money coming in", moneyOut: "Money going out", leftToUse: "Left to use", language: "Language", currency: "Currency", signOut: "Sign out", save: "Save", intro: "Just a few taps.", description: "Description", amount: "Amount", date: "Date", category: "Category", whereMoneyGoes: "Where your money goes", used: "used", of: " of ", remaining: "remaining", over: "over target", addIncomePrompt: "Add income and your targets are ready", noTransactions: "Nothing here yet", moneyStory: "Your first one can go here", quickActions: "Quick actions", entry: "entry", entries: "entries", search: "Search description...", allTypes: "All types", allCategories: "All categories", delete: "Delete entry", exampleIncome: "e.g. Monthly salary", exampleExpense: "e.g. Coffee, rent, groceries"
   };
 
   // Save to local storage when state changes
@@ -555,7 +555,7 @@ export default function Home() {
 
       {syncError && <div className={styles.syncError} role="alert">⚠ {syncError}</div>}
 
-      <section className={styles.quickActions} aria-label="Quick actions">
+      <section className={styles.quickActions} aria-label={copy.quickActions}>
         <a className={`${styles.quickAction} ${styles.quickExpense}`} href="#logger" onClick={() => setType("expense")}>
           <span className={styles.quickIcon}>−</span>
           <span><strong>{copy.addExpense.charAt(0).toUpperCase() + copy.addExpense.slice(1)}</strong><small>{copy.expenses}</small></span>
@@ -576,7 +576,7 @@ export default function Home() {
             <p className={styles.panelIntro}>{copy.intro}</p>
             <form onSubmit={handleAddTransaction} className={styles.form}>
               <div className={styles.inputGroup}>
-                <button
+                  <button
                   type="button"
                   onClick={() => setType("expense")}
                   style={{
@@ -588,7 +588,7 @@ export default function Home() {
                     color: type === "expense" ? "white" : "var(--text-secondary)",
                   }}
                 >
-                  Expense
+                  {copy.expenses}
                 </button>
                 <button
                   type="button"
@@ -602,7 +602,7 @@ export default function Home() {
                     color: type === "income" ? "white" : "var(--text-secondary)",
                   }}
                 >
-                  Income
+                  {copy.income}
                 </button>
               </div>
 
@@ -611,7 +611,7 @@ export default function Home() {
                 <input
                   id="description"
                   type="text"
-                  placeholder={type === "income" ? "e.g. Monthly salary" : "e.g. Coffee, rent, groceries"}
+                  placeholder={type === "income" ? copy.exampleIncome : copy.exampleExpense}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required
@@ -732,7 +732,7 @@ export default function Home() {
             <div className={styles.panelTitle}>
               <span>{copy.activity}</span>
               <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "normal" }}>
-                {filteredTransactions.length} {filteredTransactions.length === 1 ? "entry" : "entries"}
+                {filteredTransactions.length} {filteredTransactions.length === 1 ? copy.entry : copy.entries}
               </span>
             </div>
 
@@ -740,7 +740,7 @@ export default function Home() {
             <div style={{ display: "flex", gap: "10px", marginBottom: "16px", flexWrap: "wrap" }}>
               <input
                 type="text"
-                placeholder="Search description..."
+                placeholder={copy.search}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{ flex: 1, minWidth: "150px" }}
@@ -750,16 +750,16 @@ export default function Home() {
                 onChange={(e) => setTypeFilter(e.target.value as any)}
                 style={{ width: "110px" }}
               >
-                <option value="all">All Types</option>
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
+                <option value="all">{copy.allTypes}</option>
+                <option value="income">{copy.income}</option>
+                <option value="expense">{copy.expenses}</option>
               </select>
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
                 style={{ width: "140px" }}
               >
-                <option value="all">All Categories</option>
+                <option value="all">{copy.allCategories}</option>
                 {CATEGORIES.map((cat) => (
                   <option key={cat} value={cat}>
                     {cat}
@@ -793,7 +793,7 @@ export default function Home() {
                       <button 
                         onClick={() => handleDeleteTransaction(tx.id)} 
                         className={styles.deleteBtn}
-                        title="Delete entry"
+                        title={copy.delete}
                       >
                         🗑️
                       </button>
