@@ -22,6 +22,12 @@ interface Budget {
   category: string;
   limit: number;
 }
+interface Note {
+  id: string;
+  text: string;
+  date: string;
+  done: boolean;
+}
 
 // Categories list
 const CATEGORIES = [
@@ -103,6 +109,9 @@ export default function Home() {
   const [currency, setCurrency] = useState<"EUR" | "TRY">("EUR");
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [budgets, setBudgets] = useState<Budget[]>(DEFAULT_BUDGETS);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [noteText, setNoteText] = useState("");
+  const [noteDate, setNoteDate] = useState("");
   
   // Form State
   const [description, setDescription] = useState("");
@@ -132,11 +141,12 @@ export default function Home() {
         }
         setUserEmail(data.user.email || "");
         setUserId(data.user.id);
-        supabase.from("budget_data").select("transactions, budgets").eq("user_id", data.user.id).maybeSingle().then(({ data: budgetData, error }) => {
+        supabase.from("budget_data").select("transactions, budgets, notes").eq("user_id", data.user.id).maybeSingle().then(({ data: budgetData, error }) => {
           if (error) setSyncError("Could not load your synced budget. Try refreshing.");
           if (budgetData) {
             setTransactions(Array.isArray(budgetData.transactions) ? budgetData.transactions as Transaction[] : []);
             setBudgets(Array.isArray(budgetData.budgets) ? budgetData.budgets as Budget[] : DEFAULT_BUDGETS);
+            setNotes(Array.isArray(budgetData.notes) ? budgetData.notes as Note[] : []);
           }
           setCloudReady(true);
         });
@@ -172,9 +182,9 @@ export default function Home() {
 
   const formatMoney = (value: number, fractionDigits = 2) => formatCurrency(value, currency, language, fractionDigits);
   const copy = language === "tr" ? {
-    income: "Gelir", expenses: "Harcamalar", balance: "Bakiye", plan: "50 / 30 / 20 planı", add: "Bir şey ekle", addIncome: "gelir", addExpense: "harcama", activity: "Hareketlerin", spendingGuide: "Harcama rehberin", moneyIn: "Gelen para", moneyOut: "Giden para", leftToUse: "Kullanılabilir", language: "Dil", currency: "Para birimi", signOut: "Çıkış yap", save: "Kaydet", intro: "Birkaç dokunuşla tamam.", description: "Açıklama", amount: "Tutar", date: "Tarih", category: "Kategori", whereMoneyGoes: "Paran nereye gidiyor", used: "kullanıldı", of: " / ", remaining: "kaldı", over: "hedef aşıldı", addIncomePrompt: "Gelir ekleyince hedeflerin hazır", noTransactions: "Henüz hareket yok", moneyStory: "Hazır olduğunda ilkini ekle", quickActions: "Hızlı işlemler", entry: "kayıt", entries: "kayıt", search: "Açıklamada ara...", allTypes: "Tüm türler", allCategories: "Tüm kategoriler", delete: "Kaydı sil", exampleIncome: "ör. Aylık maaş", exampleExpense: "ör. Kahve, kira, market"
+    income: "Gelir", expenses: "Harcamalar", balance: "Bakiye", plan: "50 / 30 / 20 planı", add: "Bir şey ekle", addIncome: "gelir", addExpense: "harcama", activity: "Hareketlerin", spendingGuide: "Harcama rehberin", moneyIn: "Gelen para", moneyOut: "Giden para", leftToUse: "Kullanılabilir", language: "Dil", currency: "Para birimi", signOut: "Çıkış yap", save: "Kaydet", intro: "Birkaç dokunuşla tamam.", description: "Açıklama", amount: "Tutar", date: "Tarih", category: "Kategori", whereMoneyGoes: "Paran nereye gidiyor", used: "kullanıldı", of: " / ", remaining: "kaldı", over: "hedef aşıldı", addIncomePrompt: "Gelir ekleyince hedeflerin hazır", noTransactions: "Henüz hareket yok", moneyStory: "Hazır olduğunda ilkini ekle", quickActions: "Hızlı işlemler", entry: "kayıt", entries: "kayıt", search: "Açıklamada ara...", allTypes: "Tüm türler", allCategories: "Tüm kategoriler", delete: "Kaydı sil", exampleIncome: "ör. Aylık maaş", exampleExpense: "ör. Kahve, kira, market", notes: "Notlar ve hatırlatıcılar", notePlaceholder: "Örn. Kira ödemesi", addNote: "Not ekle", noNotes: "Henüz not yok", done: "Tamamlandı"
   } : {
-    income: "Income", expenses: "Expenses", balance: "Balance", plan: "50 / 30 / 20 plan", add: "Add something", addIncome: "income", addExpense: "expense", activity: "Your activity", spendingGuide: "Your spending guide", moneyIn: "Money coming in", moneyOut: "Money going out", leftToUse: "Left to use", language: "Language", currency: "Currency", signOut: "Sign out", save: "Save", intro: "Just a few taps.", description: "Description", amount: "Amount", date: "Date", category: "Category", whereMoneyGoes: "Where your money goes", used: "used", of: " of ", remaining: "remaining", over: "over target", addIncomePrompt: "Add income and your targets are ready", noTransactions: "Nothing here yet", moneyStory: "Your first one can go here", quickActions: "Quick actions", entry: "entry", entries: "entries", search: "Search description...", allTypes: "All types", allCategories: "All categories", delete: "Delete entry", exampleIncome: "e.g. Monthly salary", exampleExpense: "e.g. Coffee, rent, groceries"
+    income: "Income", expenses: "Expenses", balance: "Balance", plan: "50 / 30 / 20 plan", add: "Add something", addIncome: "income", addExpense: "expense", activity: "Your activity", spendingGuide: "Your spending guide", moneyIn: "Money coming in", moneyOut: "Money going out", leftToUse: "Left to use", language: "Language", currency: "Currency", signOut: "Sign out", save: "Save", intro: "Just a few taps.", description: "Description", amount: "Amount", date: "Date", category: "Category", whereMoneyGoes: "Where your money goes", used: "used", of: " of ", remaining: "remaining", over: "over target", addIncomePrompt: "Add income and your targets are ready", noTransactions: "Nothing here yet", moneyStory: "Your first one can go here", quickActions: "Quick actions", entry: "entry", entries: "entries", search: "Search description...", allTypes: "All types", allCategories: "All categories", delete: "Delete entry", exampleIncome: "e.g. Monthly salary", exampleExpense: "e.g. Coffee, rent, groceries", notes: "Notes & reminders", notePlaceholder: "e.g. Pay rent", addNote: "Add note", noNotes: "No notes yet", done: "Done"
   };
 
   // Save to local storage when state changes
@@ -197,6 +207,7 @@ export default function Home() {
         user_id: userId,
         transactions,
         budgets,
+        notes,
         updated_at: new Date().toISOString(),
       }, { onConflict: "user_id" }).then(({ error }) => {
         if (error) setSyncError("Your change could not sync. Please try again.");
@@ -204,7 +215,7 @@ export default function Home() {
       });
     }, 400);
     return () => window.clearTimeout(timeout);
-  }, [transactions, budgets, mounted, cloudReady, userId]);
+  }, [transactions, budgets, notes, mounted, cloudReady, userId]);
 
   useEffect(() => {
     if (mounted) {
@@ -275,6 +286,14 @@ export default function Home() {
     if (confirm("Are you sure you want to delete this transaction?")) {
       setTransactions(transactions.filter((tx) => tx.id !== id));
     }
+  };
+
+  const handleAddNote = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!noteText.trim()) return;
+    setNotes([{ id: Date.now().toString(36), text: noteText.trim(), date: noteDate, done: false }, ...notes]);
+    setNoteText("");
+    setNoteDate("");
   };
 
   // Export data as JSON
@@ -692,6 +711,22 @@ export default function Home() {
 
         {/* Right Column: Budgets progress & transaction list */}
         <div className={styles.rightColumn}>
+          <section className={styles.glassPanel}>
+            <h3 className={styles.panelTitle}>📝 {copy.notes}</h3>
+            <form onSubmit={handleAddNote} className={styles.noteForm}>
+              <input value={noteText} onChange={(e) => setNoteText(e.target.value)} placeholder={copy.notePlaceholder} aria-label={copy.notePlaceholder} />
+              <input type="date" value={noteDate} onChange={(e) => setNoteDate(e.target.value)} aria-label={copy.date} />
+              <button type="submit" className={styles.noteButton}>{copy.addNote}</button>
+            </form>
+            <div className={styles.notesList}>
+              {notes.length === 0 ? <small className={styles.noteEmpty}>{copy.noNotes}</small> : notes.map((note) => (
+                <div className={`${styles.noteItem} ${note.done ? styles.noteDone : ""}`} key={note.id}>
+                  <label><input type="checkbox" checked={note.done} onChange={() => setNotes(notes.map((item) => item.id === note.id ? { ...item, done: !item.done } : item))} /><span>{note.text}</span></label>
+                  <small>{note.date || copy.done}</small>
+                </div>
+              ))}
+            </div>
+          </section>
           {/* Budget progress bars */}
           <section className={styles.glassPanel}>
             <h3 className={styles.panelTitle}>{copy.spendingGuide}</h3>
