@@ -9,12 +9,14 @@ export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     setError("");
+    setSuccess("");
 
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
       setError("Supabase is not configured yet. Add the Vercel environment variables first.");
@@ -31,7 +33,7 @@ export default function AuthPage() {
         return;
       }
       if (!data.session) {
-        setError("Account created. Check your email to confirm your account, then sign in.");
+        setSuccess("Account created successfully. Check your email to confirm your account, then sign in.");
         setMode("signin");
         setLoading(false);
         return;
@@ -63,9 +65,10 @@ export default function AuthPage() {
           <label htmlFor="password">Password</label>
           <input id="password" type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} required />
           {error && <p className={styles.error}>{error}</p>}
+          {success && <p className={styles.success}>{success}</p>}
           <button type="submit" disabled={loading}>{loading ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}</button>
         </form>
-        <button type="button" className={styles.modeButton} onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); }}>
+        <button type="button" className={styles.modeButton} onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); setSuccess(""); }}>
           {mode === "signin" ? "New here? Create an account" : "Already have an account? Sign in"}
         </button>
         <p className={styles.note}>Your budget is private and only visible to your account.</p>

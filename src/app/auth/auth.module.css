@@ -10,4 +10,5 @@
 .form button:disabled { opacity: .65; cursor: wait; }
 .modeButton { width: 100%; margin-top: 18px; padding: 8px; color: #c4b5fd; background: transparent; font-size: .82rem; }
 .error { color: #fb7185; font-size: .82rem; margin-top: 10px; }
+.success { color: #6ee7b7; font-size: .82rem; line-height: 1.45; margin-top: 10px; }
 .note { color: var(--text-muted); font-size: .76rem; text-align: center; margin-top: 24px; }
