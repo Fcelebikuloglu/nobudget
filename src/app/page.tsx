@@ -57,10 +57,10 @@ const DEFAULT_BUDGETS: Budget[] = [
   { category: "Miscellaneous", limit: 150 },
 ];
 
-const formatCurrency = (value: number, fractionDigits = 2) =>
-  new Intl.NumberFormat("de-DE", {
+const formatCurrency = (value: number, currency = "EUR", language = "en", fractionDigits = 2) =>
+  new Intl.NumberFormat(language === "tr" ? "tr-TR" : "de-DE", {
     style: "currency",
-    currency: "EUR",
+    currency,
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   }).format(value);
@@ -99,6 +99,8 @@ export default function Home() {
   const [userId, setUserId] = useState("");
   const [cloudReady, setCloudReady] = useState(false);
   const [syncError, setSyncError] = useState("");
+  const [language, setLanguage] = useState<"en" | "tr">("en");
+  const [currency, setCurrency] = useState<"EUR" | "TRY">("EUR");
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [budgets, setBudgets] = useState<Budget[]>(DEFAULT_BUDGETS);
   
@@ -117,6 +119,10 @@ export default function Home() {
   // Hydration safety check
   useEffect(() => {
     setMounted(true);
+    const savedLanguage = localStorage.getItem("no_budget_plan_language");
+    const savedCurrency = localStorage.getItem("no_budget_plan_currency");
+    if (savedLanguage === "tr" || savedLanguage === "en") setLanguage(savedLanguage);
+    if (savedCurrency === "EUR" || savedCurrency === "TRY") setCurrency(savedCurrency);
     if (supabaseConfigured) {
       const supabase = createClient();
       supabase.auth.getUser().then(({ data }) => {
@@ -164,6 +170,13 @@ export default function Home() {
     setDate(today);
   }, []);
 
+  const formatMoney = (value: number, fractionDigits = 2) => formatCurrency(value, currency, language, fractionDigits);
+  const copy = language === "tr" ? {
+    income: "Gelir", expenses: "Harcamalar", balance: "Bakiye", plan: "50 / 30 / 20 planı", add: "Bir şey ekle", addIncome: "gelir", addExpense: "harcama", activity: "Hareketlerin", spendingGuide: "Harcama rehberin", moneyIn: "Gelen para", moneyOut: "Giden para", leftToUse: "Kullanılabilir", language: "Dil", currency: "Para birimi", signOut: "Çıkış yap", save: "Kaydet"
+  } : {
+    income: "Income", expenses: "Expenses", balance: "Balance", plan: "50 / 30 / 20 plan", add: "Add something", addIncome: "income", addExpense: "expense", activity: "Your activity", spendingGuide: "Your spending guide", moneyIn: "Money coming in", moneyOut: "Money going out", leftToUse: "Left to use", language: "Language", currency: "Currency", signOut: "Sign out", save: "Save"
+  };
+
   // Save to local storage when state changes
   useEffect(() => {
     if (mounted && cloudReady && !supabaseConfigured) {
@@ -192,6 +205,13 @@ export default function Home() {
     }, 400);
     return () => window.clearTimeout(timeout);
   }, [transactions, budgets, mounted, cloudReady, userId]);
+
+  useEffect(() => {
+    if (mounted) {
+      localStorage.setItem("no_budget_plan_language", language);
+      localStorage.setItem("no_budget_plan_currency", currency);
+    }
+  }, [language, currency, mounted]);
 
   if (!mounted) {
     return (
@@ -392,7 +412,7 @@ export default function Home() {
                 cursor: "pointer",
               }}
             >
-              <title>{`${d.name}: ${formatCurrency(d.value)}`}</title>
+              <title>{`${d.name}: ${formatMoney(d.value)}`}</title>
             </circle>
           );
         })}
@@ -415,7 +435,7 @@ export default function Home() {
           fontSize="15px"
           fontWeight="700"
         >
-          {formatCurrency(totalExpenses)}
+          {formatMoney(totalExpenses)}
         </text>
       </svg>
     );
@@ -431,7 +451,19 @@ export default function Home() {
         </div>
         <div className={styles.actions}>
           <span className={styles.userBadge}>{userEmail}</span>
-          <button className={styles.iconButton} onClick={handleSignOut}>Sign out</button>
+          <label className={styles.settingControl}>{copy.language}
+            <select value={language} onChange={(event) => setLanguage(event.target.value as "en" | "tr")}>
+              <option value="en">English</option>
+              <option value="tr">Türkçe</option>
+            </select>
+          </label>
+          <label className={styles.settingControl}>{copy.currency}
+            <select value={currency} onChange={(event) => setCurrency(event.target.value as "EUR" | "TRY")}>
+              <option value="EUR">€ EUR</option>
+              <option value="TRY">₺ TRY</option>
+            </select>
+          </label>
+          <button className={styles.iconButton} onClick={handleSignOut}>{copy.signOut}</button>
           <button className={styles.iconButton} onClick={handleExportData}>
             <span>📤</span> Export
           </button>
@@ -450,25 +482,25 @@ export default function Home() {
       {/* Main KPI Summaries */}
       <section className={styles.summaryGrid}>
         <div className={`${styles.glassPanel} ${styles.card} ${styles.incomeCard}`}>
-          <span className={styles.cardLabel}>Monthly Income</span>
+            <span className={styles.cardLabel}>{copy.income}</span>
           <h2 className={styles.cardValue} style={{ color: "var(--success)" }}>
-            +{formatCurrency(totalIncome)}
+            +{formatMoney(totalIncome)}
           </h2>
-          <span className={styles.cardMeta}>Money coming in</span>
+          <span className={styles.cardMeta}>{copy.moneyIn}</span>
         </div>
         <div className={`${styles.glassPanel} ${styles.card} ${styles.expenseCard}`}>
-          <span className={styles.cardLabel}>Total Expenses</span>
+            <span className={styles.cardLabel}>{copy.expenses}</span>
           <h2 className={styles.cardValue} style={{ color: "var(--danger)" }}>
-            -{formatCurrency(totalExpenses)}
+            -{formatMoney(totalExpenses)}
           </h2>
-          <span className={styles.cardMeta}>Money going out</span>
+          <span className={styles.cardMeta}>{copy.moneyOut}</span>
         </div>
         <div className={`${styles.glassPanel} ${styles.card} ${styles.balanceCard}`}>
-          <span className={styles.cardLabel}>Net Balance</span>
+            <span className={styles.cardLabel}>{copy.balance}</span>
           <h2 className={styles.cardValue} style={{ color: netBalance >= 0 ? "var(--text-primary)" : "var(--danger)" }}>
-            {netBalance >= 0 ? "" : "-"}{formatCurrency(Math.abs(netBalance))}
+            {netBalance >= 0 ? "" : "-"}{formatMoney(Math.abs(netBalance))}
           </h2>
-          <span className={styles.cardMeta}>Left to use</span>
+          <span className={styles.cardMeta}>{copy.leftToUse}</span>
         </div>
       </section>
 
@@ -476,10 +508,10 @@ export default function Home() {
       <section className={`${styles.glassPanel} ${styles.planPanel}`}>
         <div className={styles.planHeading}>
           <div>
-            <h3 className={styles.panelTitle}>50 / 30 / 20 plan</h3>
+            <h3 className={styles.panelTitle}>{copy.plan}</h3>
             <p className={styles.planIntro}>A simple guide for every euro of your take-home income.</p>
           </div>
-          <span className={styles.planIncome}>Based on {formatCurrency(planTotal, 0)} income</span>
+          <span className={styles.planIncome}>Based on {formatMoney(planTotal, 0)} income</span>
         </div>
         <div className={styles.planGrid}>
           {planGroups.map((group) => {
@@ -498,11 +530,11 @@ export default function Home() {
                   <div className={styles.progressBar} style={{ width: `${progress}%`, backgroundColor: group.color }} />
                 </div>
                 <div className={styles.planNumbers}>
-                  <span>{formatCurrency(group.spent, 0)} used</span>
-                  <span>of {formatCurrency(group.target, 0)}</span>
+                  <span>{formatMoney(group.spent, 0)} used</span>
+                  <span>of {formatMoney(group.target, 0)}</span>
                 </div>
                 <small className={group.remaining < 0 ? styles.planOver : styles.planRemaining}>
-                  {planTotal === 0 ? "Add income to set your targets" : group.remaining >= 0 ? `${formatCurrency(group.remaining, 0)} remaining` : `${formatCurrency(Math.abs(group.remaining), 0)} over target`}
+                  {planTotal === 0 ? "Add income to set your targets" : group.remaining >= 0 ? `${formatMoney(group.remaining, 0)} remaining` : `${formatMoney(Math.abs(group.remaining), 0)} over target`}
                 </small>
               </div>
             );
@@ -518,7 +550,7 @@ export default function Home() {
         <div className={styles.leftColumn}>
           {/* Logger Panel */}
           <section className={styles.glassPanel}>
-            <h3 className={styles.panelTitle}>Add something</h3>
+            <h3 className={styles.panelTitle}>{copy.add}</h3>
             <p className={styles.panelIntro}>Start with your income, then add expenses as they happen. It only takes a few seconds.</p>
             <form onSubmit={handleAddTransaction} className={styles.form}>
               <div className={styles.inputGroup}>
@@ -607,7 +639,7 @@ export default function Home() {
               )}
 
               <button type="submit" className={styles.submitBtn}>
-                Add {type === "income" ? "income" : "expense"}
+                {copy.save} {type === "income" ? copy.addIncome : copy.addExpense}
               </button>
             </form>
           </section>
@@ -627,7 +659,7 @@ export default function Home() {
                       style={{ backgroundColor: CATEGORY_COLORS[name] || "#64748b" }}
                     />
                     <span style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>
-                      {name}: <strong>{formatCurrency(val, 0)}</strong>
+                      {name}: <strong>{formatMoney(val, 0)}</strong>
                     </span>
                   </div>
                 ))}
@@ -640,7 +672,7 @@ export default function Home() {
         <div className={styles.rightColumn}>
           {/* Budget progress bars */}
           <section className={styles.glassPanel}>
-            <h3 className={styles.panelTitle}>Your spending guide</h3>
+            <h3 className={styles.panelTitle}>{copy.spendingGuide}</h3>
             <div className={styles.budgetTracker}>
               {budgets.map((b) => {
                 const spent = categoryTotals[b.category] || 0;
@@ -658,7 +690,7 @@ export default function Home() {
                     <div className={styles.budgetHeader}>
                       <span>{b.category}</span>
                       <span>
-                        <strong>{formatCurrency(spent, 0)}</strong> / {formatCurrency(b.limit, 0)} ({percent.toFixed(0)}%)
+                        <strong>{formatMoney(spent, 0)}</strong> / {formatMoney(b.limit, 0)} ({percent.toFixed(0)}%)
                       </span>
                     </div>
                     <div className={styles.progressBarContainer}>
@@ -676,7 +708,7 @@ export default function Home() {
           {/* History tracker */}
           <section className={styles.glassPanel}>
             <div className={styles.panelTitle}>
-              <span>Your activity</span>
+              <span>{copy.activity}</span>
               <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: "normal" }}>
                 {filteredTransactions.length} {filteredTransactions.length === 1 ? "entry" : "entries"}
               </span>
@@ -734,7 +766,7 @@ export default function Home() {
                     </div>
                     <div className={styles.txRight}>
                       <span className={`${styles.txAmount} ${tx.type === "income" ? styles.incomeAmount : styles.expenseAmount}`}>
-                        {tx.type === "income" ? "+" : "-"}{formatCurrency(tx.amount)}
+                        {tx.type === "income" ? "+" : "-"}{formatMoney(tx.amount)}
                       </span>
                       <button 
                         onClick={() => handleDeleteTransaction(tx.id)} 
