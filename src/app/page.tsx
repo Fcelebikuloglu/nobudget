@@ -479,6 +479,17 @@ export default function Home() {
         </div>
       </header>
 
+      <section className={styles.balanceHero}>
+        <div>
+          <span className={styles.heroEyebrow}>{copy.balance}</span>
+          <strong className={styles.heroAmount}>
+            {netBalance < 0 ? "-" : ""}{formatMoney(Math.abs(netBalance))}
+          </strong>
+          <span className={styles.heroHint}>{copy.leftToUse}</span>
+        </div>
+        <div className={styles.heroSparkles} aria-hidden="true">✦</div>
+      </section>
+
       {/* Main KPI Summaries */}
       <section className={styles.summaryGrid}>
         <div className={`${styles.glassPanel} ${styles.card} ${styles.incomeCard}`}>
