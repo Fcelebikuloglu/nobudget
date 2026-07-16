@@ -138,8 +138,8 @@ export default function Home() {
       setAuthChecked(true);
       setCloudReady(true);
     }
-    const storedTx = localStorage.getItem("gravity_transactions");
-    const storedBudgets = localStorage.getItem("gravity_budgets");
+    const storedTx = localStorage.getItem("no_budget_plan_transactions") || localStorage.getItem("gravity_transactions");
+    const storedBudgets = localStorage.getItem("no_budget_plan_budgets") || localStorage.getItem("gravity_budgets");
     
     if (storedTx) {
       try {
@@ -165,13 +165,13 @@ export default function Home() {
   // Save to local storage when state changes
   useEffect(() => {
     if (mounted && cloudReady && !supabaseConfigured) {
-      localStorage.setItem("gravity_transactions", JSON.stringify(transactions));
+      localStorage.setItem("no_budget_plan_transactions", JSON.stringify(transactions));
     }
   }, [transactions, mounted, cloudReady]);
 
   useEffect(() => {
     if (mounted && cloudReady && !supabaseConfigured) {
-      localStorage.setItem("gravity_budgets", JSON.stringify(budgets));
+      localStorage.setItem("no_budget_plan_budgets", JSON.stringify(budgets));
     }
   }, [budgets, mounted, cloudReady]);
 
@@ -258,7 +258,7 @@ export default function Home() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `gravity_budget_backup_${new Date().toISOString().split("T")[0]}.json`);
+    downloadAnchor.setAttribute("download", `no_budget_plan_backup_${new Date().toISOString().split("T")[0]}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -416,7 +416,7 @@ export default function Home() {
       {/* Header Area */}
       <header className={styles.header}>
         <div className={styles.titleArea}>
-          <h1>Gravity Budget</h1>
+          <h1>No Budget Plan</h1>
           <p>Secure personal budget manager stored completely offline</p>
         </div>
         <div className={styles.actions}>

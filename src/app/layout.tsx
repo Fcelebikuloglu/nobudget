@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gravity Budget — Smart Personal Finance Tracker",
-  description: "A clean, beautiful, and secure personal budget tracker saved directly to your browser storage.",
+  title: "No Budget Plan — Smart Personal Finance Tracker",
+  description: "A clean, secure personal budget planner with 50/30/20 tracking and synced accounts.",
 };
 
 export default function RootLayout({
