@@ -488,21 +488,15 @@ export default function Home() {
                   <option value="EUR">€ EUR</option><option value="TRY">₺ TRY</option>
                 </select>
               </label>
+              <div className={styles.menuBackupActions}>
+                <button className={styles.menuAction} onClick={handleExportData}>📤 Export</button>
+                <label className={styles.menuAction} style={{ cursor: "pointer" }}>📥 Import
+                  <input type="file" accept=".json" onChange={handleImportData} style={{ display: "none" }} />
+                </label>
+              </div>
               <button className={`${styles.iconButton} ${styles.signOutButton}`} onClick={handleSignOut}>{copy.signOut}</button>
             </div>}
           </div>
-          <button className={styles.iconButton} onClick={handleExportData}>
-            <span>📤</span> Export
-          </button>
-          <label className={styles.iconButton} style={{ cursor: "pointer" }}>
-            <span>📥</span> Import
-            <input 
-              type="file" 
-              accept=".json" 
-              onChange={handleImportData} 
-              style={{ display: "none" }} 
-            />
-          </label>
         </div>
       </header>
 
