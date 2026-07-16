@@ -474,7 +474,6 @@ export default function Home() {
         <div className={styles.actions}>
           <div className={styles.headerTools}>
             <button className={styles.headerTool} onClick={() => window.location.reload()} aria-label="Refresh dashboard" title="Refresh dashboard">↻</button>
-            <button className={styles.headerTool} onClick={() => setProfileOpen(true)} aria-label="Open settings" title="Open settings">⚙</button>
           </div>
           <div className={styles.profileMenuWrap}>
             <button className={styles.profileButton} onClick={() => setProfileOpen(!profileOpen)} aria-label="Open account menu" aria-expanded={profileOpen}>
