@@ -471,7 +471,11 @@ export default function Home() {
           <p>Your money, made easy.</p>
         </div>
         <div className={styles.actions}>
-          <span className={styles.userBadge}>{userEmail}</span>
+          <div className={styles.accountChip} title={userEmail}>
+            <span className={styles.accountAvatar}>{(userEmail[0] || "M").toUpperCase()}</span>
+            <span className={styles.accountName}>{userEmail}</span>
+          </div>
+          <span className={styles.preferenceDivider} aria-hidden="true" />
           <label className={styles.settingControl}>{copy.language}
             <select value={language} onChange={(event) => setLanguage(event.target.value as "en" | "tr")}>
               <option value="en">English</option>
@@ -484,7 +488,7 @@ export default function Home() {
               <option value="TRY">₺ TRY</option>
             </select>
           </label>
-          <button className={styles.iconButton} onClick={handleSignOut}>{copy.signOut}</button>
+          <button className={`${styles.iconButton} ${styles.signOutButton}`} onClick={handleSignOut}>{copy.signOut}</button>
           <button className={styles.iconButton} onClick={handleExportData}>
             <span>📤</span> Export
           </button>
