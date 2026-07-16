@@ -2,7 +2,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 42px 28px 64px;
-  padding-top: 126px;
+  padding-top: 92px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -30,15 +30,15 @@
   left: 50%;
   transform: translateX(-50%);
   width: min(calc(100% - 56px), 1224px);
-  padding: 12px 0;
-  background: rgba(17, 24, 39, .94);
+  padding: 9px 0;
+  background: rgba(17, 24, 39, .88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(196,181,253,.14);
 }
 
 .titleArea h1 {
-  font-size: 2rem;
+  font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   background: linear-gradient(135deg, #f0abfc 0%, #c4b5fd 48%, #86efac 100%);
@@ -51,6 +51,7 @@
   color: var(--text-secondary);
   font-size: 0.85rem;
   margin-top: 4px;
+  display: none;
 }
 
 .actions {
@@ -133,10 +134,9 @@
   .balanceHero { min-height: 132px; margin-top: 14px; padding: 22px; border-radius: 20px; }
   .heroAmount { font-size: 2.35rem; }
   .heroSparkles { font-size: 2.2rem; }
-  .container { padding: 22px 14px 40px; padding-top: 156px; gap: 16px; }
-  .header { width: calc(100% - 28px); flex-direction: column; align-items: stretch; gap: 14px; }
-  .titleArea h1 { font-size: 1.5rem; }
-  .titleArea p { font-size: 0.75rem; max-width: none; }
+  .container { padding: 22px 14px 40px; padding-top: 78px; gap: 16px; }
+  .header { width: calc(100% - 28px); flex-direction: row; align-items: center; gap: 10px; }
+  .titleArea h1 { font-size: 1.05rem; }
   .actions { gap: 7px; flex-wrap: wrap; }
   .settingControl { flex: 1 1 130px; justify-content: space-between; }
   .settingControl select { flex: 1; min-width: 0; }
