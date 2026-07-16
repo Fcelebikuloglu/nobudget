@@ -39,12 +39,9 @@
 
 .titleArea h1 {
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 650;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #f0abfc 0%, #c4b5fd 48%, #86efac 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--text-primary);
 }
 
 .titleArea p {
