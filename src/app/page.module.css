@@ -81,6 +81,7 @@
 .entryModal { width: min(100%, 560px); max-height: calc(100vh - 36px); overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,.45); }
 .modalTitleRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .closeButton { width: 34px; height: 34px; border-radius: 50%; color: var(--text-primary); background: rgba(255,255,255,.08); font-size: 1.4rem; }
+.typePrompt { margin: -2px 0 -4px; color: var(--text-muted); font-size: .78rem; font-weight: 600; }
 
 .iconButton {
   background: rgba(255, 255, 255, 0.05);
