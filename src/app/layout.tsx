@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "No Budget Plan — Smart Personal Finance Tracker",
-  description: "A clean, secure personal budget planner with 50/30/20 tracking and synced accounts.",
+  title: "My Easy Budget Plan — Simple Personal Finance",
+  description: "A friendly, secure budget planner with 50/30/20 guidance, notes, reminders, and synced accounts.",
 };
 
 export default function RootLayout({

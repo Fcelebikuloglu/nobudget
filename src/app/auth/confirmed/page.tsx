@@ -6,7 +6,7 @@ export default function ConfirmedPage() {
     <main className={styles.authPage}>
       <section className={`${styles.authCard} ${styles.confirmedCard}`}>
         <div className={`${styles.logoMark} ${styles.successMark}`}>✓</div>
-        <p className={styles.eyebrow}>NO BUDGET PLAN</p>
+        <p className={styles.eyebrow}>MY EASY BUDGET PLAN</p>
         <h1>Email confirmed</h1>
         <p className={styles.subtitle}>Your account is ready. Welcome to a calmer way to manage your money.</p>
 

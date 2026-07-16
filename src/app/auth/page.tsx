@@ -59,7 +59,7 @@ export default function AuthPage() {
   return (
     <main className={styles.authPage}>
       <section className={styles.authCard}>
-        <div className={styles.logoMark}>G</div>
+        <div className={styles.logoMark}>M</div>
         <p className={styles.eyebrow}>PRIVATE FINANCE</p>
         <h1>{mode === "signin" ? "Welcome back" : "Create your account"}</h1>
         <p className={styles.subtitle}>{mode === "signin" ? "Sign in to access your personal budget." : "Start your private budget in seconds."}</p>

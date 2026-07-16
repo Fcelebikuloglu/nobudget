@@ -308,7 +308,7 @@ export default function Home() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `no_budget_plan_backup_${new Date().toISOString().split("T")[0]}.json`);
+    downloadAnchor.setAttribute("download", `my_easy_budget_plan_backup_${new Date().toISOString().split("T")[0]}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -467,7 +467,7 @@ export default function Home() {
       {/* Header Area */}
       <header className={styles.header}>
         <div className={styles.titleArea}>
-          <h1>No Budget Plan</h1>
+          <h1>My Easy Budget Plan</h1>
           <p>Your money, made easy.</p>
         </div>
         <div className={styles.actions}>
