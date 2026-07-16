@@ -98,6 +98,7 @@ export default function Home() {
   const [userEmail, setUserEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [cloudReady, setCloudReady] = useState(false);
+  const [syncError, setSyncError] = useState("");
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [budgets, setBudgets] = useState<Budget[]>(DEFAULT_BUDGETS);
   
@@ -125,7 +126,8 @@ export default function Home() {
         }
         setUserEmail(data.user.email || "");
         setUserId(data.user.id);
-        supabase.from("budget_data").select("transactions, budgets").eq("user_id", data.user.id).maybeSingle().then(({ data: budgetData }) => {
+        supabase.from("budget_data").select("transactions, budgets").eq("user_id", data.user.id).maybeSingle().then(({ data: budgetData, error }) => {
+          if (error) setSyncError("Could not load your synced budget. Try refreshing.");
           if (budgetData) {
             setTransactions(Array.isArray(budgetData.transactions) ? budgetData.transactions as Transaction[] : []);
             setBudgets(Array.isArray(budgetData.budgets) ? budgetData.budgets as Budget[] : DEFAULT_BUDGETS);
@@ -183,6 +185,9 @@ export default function Home() {
         transactions,
         budgets,
         updated_at: new Date().toISOString(),
+      }, { onConflict: "user_id" }).then(({ error }) => {
+        if (error) setSyncError("Your change could not sync. Please try again.");
+        else setSyncError("");
       });
     }, 400);
     return () => window.clearTimeout(timeout);
@@ -211,6 +216,10 @@ export default function Home() {
 
   if (!authChecked) {
     return <div className={styles.container}><div className={styles.emptyState}><p>Checking your secure session…</p></div></div>;
+  }
+
+  if (!cloudReady) {
+    return <div className={styles.container}><div className={styles.emptyState}><p>Loading your synced budget…</p></div></div>;
   }
 
   const handleSignOut = async () => {
@@ -499,6 +508,8 @@ export default function Home() {
           })}
         </div>
       </section>
+
+      {syncError && <div className={styles.syncError} role="alert">⚠ {syncError}</div>}
 
       {/* Layout Split */}
       <main className={styles.mainLayout}>
