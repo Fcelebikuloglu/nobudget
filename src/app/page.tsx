@@ -172,9 +172,9 @@ export default function Home() {
 
   const formatMoney = (value: number, fractionDigits = 2) => formatCurrency(value, currency, language, fractionDigits);
   const copy = language === "tr" ? {
-    income: "Gelir", expenses: "Harcamalar", balance: "Bakiye", plan: "50 / 30 / 20 planı", add: "Bir şey ekle", addIncome: "gelir", addExpense: "harcama", activity: "Hareketlerin", spendingGuide: "Harcama rehberin", moneyIn: "Gelen para", moneyOut: "Giden para", leftToUse: "Kullanılabilir", language: "Dil", currency: "Para birimi", signOut: "Çıkış yap", save: "Kaydet"
+    income: "Gelir", expenses: "Harcamalar", balance: "Bakiye", plan: "50 / 30 / 20 planı", add: "Bir şey ekle", addIncome: "gelir", addExpense: "harcama", activity: "Hareketlerin", spendingGuide: "Harcama rehberin", moneyIn: "Gelen para", moneyOut: "Giden para", leftToUse: "Kullanılabilir", language: "Dil", currency: "Para birimi", signOut: "Çıkış yap", save: "Kaydet", intro: "Gelirini ve harcamalarını kolayca ekle.", description: "Açıklama", amount: "Tutar", date: "Tarih", category: "Kategori", whereMoneyGoes: "Paran nereye gidiyor", used: "kullanıldı", of: " / ", remaining: "kaldı", over: "hedef aşıldı", addIncomePrompt: "Gelir ekleyerek hedeflerini oluştur", noTransactions: "Henüz hareket yok", moneyStory: "Para hikâyen burada görünecek"
   } : {
-    income: "Income", expenses: "Expenses", balance: "Balance", plan: "50 / 30 / 20 plan", add: "Add something", addIncome: "income", addExpense: "expense", activity: "Your activity", spendingGuide: "Your spending guide", moneyIn: "Money coming in", moneyOut: "Money going out", leftToUse: "Left to use", language: "Language", currency: "Currency", signOut: "Sign out", save: "Save"
+    income: "Income", expenses: "Expenses", balance: "Balance", plan: "50 / 30 / 20 plan", add: "Add something", addIncome: "income", addExpense: "expense", activity: "Your activity", spendingGuide: "Your spending guide", moneyIn: "Money coming in", moneyOut: "Money going out", leftToUse: "Left to use", language: "Language", currency: "Currency", signOut: "Sign out", save: "Save", intro: "Add your income and spending in a few easy taps.", description: "Description", amount: "Amount", date: "Date", category: "Category", whereMoneyGoes: "Where your money goes", used: "used", of: " of ", remaining: "remaining", over: "over target", addIncomePrompt: "Add income to set your targets", noTransactions: "No transactions yet", moneyStory: "Your money story will appear here"
   };
 
   // Save to local storage when state changes
@@ -363,8 +363,8 @@ export default function Home() {
     if (expenseData.length === 0) {
       return (
         <div className={styles.emptyState}>
-          <p>Nothing here yet—and that’s okay.</p>
-          <small>Add your first expense when you’re ready.</small>
+          <p>{copy.noTransactions}</p>
+          <small>{copy.intro}</small>
         </div>
       );
     }
@@ -509,9 +509,9 @@ export default function Home() {
         <div className={styles.planHeading}>
           <div>
             <h3 className={styles.panelTitle}>{copy.plan}</h3>
-            <p className={styles.planIntro}>A simple guide for every euro of your take-home income.</p>
+            <p className={styles.planIntro}>{copy.intro}</p>
           </div>
-          <span className={styles.planIncome}>Based on {formatMoney(planTotal, 0)} income</span>
+          <span className={styles.planIncome}>{formatMoney(planTotal, 0)} {copy.income}</span>
         </div>
         <div className={styles.planGrid}>
           {planGroups.map((group) => {
@@ -530,11 +530,11 @@ export default function Home() {
                   <div className={styles.progressBar} style={{ width: `${progress}%`, backgroundColor: group.color }} />
                 </div>
                 <div className={styles.planNumbers}>
-                  <span>{formatMoney(group.spent, 0)} used</span>
-                  <span>of {formatMoney(group.target, 0)}</span>
+                  <span>{formatMoney(group.spent, 0)} {copy.used}</span>
+                  <span>{copy.of}{formatMoney(group.target, 0)}</span>
                 </div>
                 <small className={group.remaining < 0 ? styles.planOver : styles.planRemaining}>
-                  {planTotal === 0 ? "Add income to set your targets" : group.remaining >= 0 ? `${formatMoney(group.remaining, 0)} remaining` : `${formatMoney(Math.abs(group.remaining), 0)} over target`}
+                  {planTotal === 0 ? copy.addIncomePrompt : group.remaining >= 0 ? `${formatMoney(group.remaining, 0)} ${copy.remaining}` : `${formatMoney(Math.abs(group.remaining), 0)} ${copy.over}`}
                 </small>
               </div>
             );
@@ -551,7 +551,7 @@ export default function Home() {
           {/* Logger Panel */}
           <section className={styles.glassPanel}>
             <h3 className={styles.panelTitle}>{copy.add}</h3>
-            <p className={styles.panelIntro}>Start with your income, then add expenses as they happen. It only takes a few seconds.</p>
+            <p className={styles.panelIntro}>{copy.intro}</p>
             <form onSubmit={handleAddTransaction} className={styles.form}>
               <div className={styles.inputGroup}>
                 <button
@@ -585,7 +585,7 @@ export default function Home() {
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="description">Description</label>
+                <label htmlFor="description">{copy.description}</label>
                 <input
                   id="description"
                   type="text"
@@ -598,7 +598,7 @@ export default function Home() {
 
               <div className={styles.inputGroup}>
                 <div className={styles.formGroup}>
-                  <label htmlFor="amount">Amount (€)</label>
+                  <label htmlFor="amount">{copy.amount} ({currency})</label>
                   <input
                     id="amount"
                     type="number"
@@ -610,7 +610,7 @@ export default function Home() {
                   />
                 </div>
                 <div className={styles.formGroup}>
-                  <label htmlFor="date">Date</label>
+                  <label htmlFor="date">{copy.date}</label>
                   <input
                     id="date"
                     type="date"
@@ -623,7 +623,7 @@ export default function Home() {
 
               {type === "expense" && (
                 <div className={styles.formGroup}>
-                  <label htmlFor="category">Category</label>
+                  <label htmlFor="category">{copy.category}</label>
                   <select
                     id="category"
                     value={category}
@@ -646,7 +646,7 @@ export default function Home() {
 
           {/* SVG Doughnut Chart Card */}
           <section className={styles.glassPanel}>
-            <h3 className={styles.panelTitle}>Where your money goes</h3>
+            <h3 className={styles.panelTitle}>{copy.whereMoneyGoes}</h3>
             <div className={styles.chartBox}>
               {renderDonutChart()}
             </div>
@@ -749,8 +749,8 @@ export default function Home() {
             <div className={styles.listContainer}>
               {filteredTransactions.length === 0 ? (
                 <div className={styles.emptyState}>
-                  <p>No transactions to show yet.</p>
-                  <small>Your money story will appear here.</small>
+                  <p>{copy.noTransactions}</p>
+                  <small>{copy.moneyStory}</small>
                 </div>
               ) : (
                 filteredTransactions.map((tx) => (
