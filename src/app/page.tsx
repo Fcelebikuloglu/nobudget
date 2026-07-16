@@ -172,9 +172,9 @@ export default function Home() {
 
   const formatMoney = (value: number, fractionDigits = 2) => formatCurrency(value, currency, language, fractionDigits);
   const copy = language === "tr" ? {
-    income: "Gelir", expenses: "Harcamalar", balance: "Bakiye", plan: "50 / 30 / 20 planı", add: "Bir şey ekle", addIncome: "gelir", addExpense: "harcama", activity: "Hareketlerin", spendingGuide: "Harcama rehberin", moneyIn: "Gelen para", moneyOut: "Giden para", leftToUse: "Kullanılabilir", language: "Dil", currency: "Para birimi", signOut: "Çıkış yap", save: "Kaydet", intro: "Gelirini ve harcamalarını kolayca ekle.", description: "Açıklama", amount: "Tutar", date: "Tarih", category: "Kategori", whereMoneyGoes: "Paran nereye gidiyor", used: "kullanıldı", of: " / ", remaining: "kaldı", over: "hedef aşıldı", addIncomePrompt: "Gelir ekleyerek hedeflerini oluştur", noTransactions: "Henüz hareket yok", moneyStory: "Para hikâyen burada görünecek"
+    income: "Gelir", expenses: "Harcamalar", balance: "Bakiye", plan: "50 / 30 / 20 planı", add: "Bir şey ekle", addIncome: "gelir", addExpense: "harcama", activity: "Hareketlerin", spendingGuide: "Harcama rehberin", moneyIn: "Gelen para", moneyOut: "Giden para", leftToUse: "Kullanılabilir", language: "Dil", currency: "Para birimi", signOut: "Çıkış yap", save: "Kaydet", intro: "Birkaç dokunuşla tamam.", description: "Açıklama", amount: "Tutar", date: "Tarih", category: "Kategori", whereMoneyGoes: "Paran nereye gidiyor", used: "kullanıldı", of: " / ", remaining: "kaldı", over: "hedef aşıldı", addIncomePrompt: "Gelir ekleyince hedeflerin hazır", noTransactions: "Henüz hareket yok", moneyStory: "Hazır olduğunda ilkini ekle"
   } : {
-    income: "Income", expenses: "Expenses", balance: "Balance", plan: "50 / 30 / 20 plan", add: "Add something", addIncome: "income", addExpense: "expense", activity: "Your activity", spendingGuide: "Your spending guide", moneyIn: "Money coming in", moneyOut: "Money going out", leftToUse: "Left to use", language: "Language", currency: "Currency", signOut: "Sign out", save: "Save", intro: "Add your income and spending in a few easy taps.", description: "Description", amount: "Amount", date: "Date", category: "Category", whereMoneyGoes: "Where your money goes", used: "used", of: " of ", remaining: "remaining", over: "over target", addIncomePrompt: "Add income to set your targets", noTransactions: "No transactions yet", moneyStory: "Your money story will appear here"
+    income: "Income", expenses: "Expenses", balance: "Balance", plan: "50 / 30 / 20 plan", add: "Add something", addIncome: "income", addExpense: "expense", activity: "Your activity", spendingGuide: "Your spending guide", moneyIn: "Money coming in", moneyOut: "Money going out", leftToUse: "Left to use", language: "Language", currency: "Currency", signOut: "Sign out", save: "Save", intro: "Just a few taps.", description: "Description", amount: "Amount", date: "Date", category: "Category", whereMoneyGoes: "Where your money goes", used: "used", of: " of ", remaining: "remaining", over: "over target", addIncomePrompt: "Add income and your targets are ready", noTransactions: "Nothing here yet", moneyStory: "Your first one can go here"
   };
 
   // Save to local storage when state changes
@@ -447,7 +447,7 @@ export default function Home() {
       <header className={styles.header}>
         <div className={styles.titleArea}>
           <h1>No Budget Plan</h1>
-          <p>A calm, simple place for all your money things.</p>
+          <p>Your money, made easy.</p>
         </div>
         <div className={styles.actions}>
           <span className={styles.userBadge}>{userEmail}</span>
