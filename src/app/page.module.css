@@ -99,7 +99,7 @@
 /* Grid Layouts */
 .summaryGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
 
@@ -116,9 +116,7 @@
   .settingControl select { flex: 1; min-width: 0; }
   .userBadge { order: 3; width: 100%; max-width: none; }
   .iconButton { padding: 9px 11px; font-size: 0.75rem; }
-  .summaryGrid {
-    grid-template-columns: 1fr;
-  }
+  .summaryGrid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .card { min-height: 116px; padding: 20px; }
   .cardValue { font-size: 1.75rem; margin: 8px 0 4px; }
   .glassPanel { padding: 20px; border-radius: 16px; }

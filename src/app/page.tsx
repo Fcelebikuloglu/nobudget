@@ -525,13 +525,6 @@ export default function Home() {
           </h2>
           <span className={styles.cardMeta}>{copy.moneyOut}</span>
         </div>
-        <div className={`${styles.glassPanel} ${styles.card} ${styles.balanceCard}`}>
-            <span className={styles.cardLabel}>{copy.balance}</span>
-          <h2 className={styles.cardValue} style={{ color: netBalance >= 0 ? "var(--text-primary)" : "var(--danger)" }}>
-            {netBalance >= 0 ? "" : "-"}{formatMoney(Math.abs(netBalance))}
-          </h2>
-          <span className={styles.cardMeta}>{copy.leftToUse}</span>
-        </div>
       </section>
 
       {/* 50/30/20 planning guide */}
