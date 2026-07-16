@@ -29,7 +29,7 @@
   font-size: 2rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #a78bfa 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #f0abfc 0%, #c4b5fd 48%, #86efac 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -47,7 +47,7 @@
   align-items: center;
 }
 
-.balanceHero { display: flex; align-items: center; justify-content: space-between; min-height: 150px; margin: 22px 0 14px; padding: 26px 30px; border: 1px solid rgba(167,139,250,.35); border-radius: 24px; background: radial-gradient(circle at 85% 20%, rgba(110,231,183,.22), transparent 34%), linear-gradient(135deg, rgba(76,61,130,.96), rgba(35,47,86,.96)); box-shadow: 0 18px 44px rgba(15,23,42,.28); }
+.balanceHero { display: flex; align-items: center; justify-content: space-between; min-height: 150px; margin: 22px 0 14px; padding: 26px 30px; border: 1px solid rgba(240,171,252,.4); border-radius: 24px; background: radial-gradient(circle at 85% 20%, rgba(134,239,172,.3), transparent 34%), linear-gradient(135deg, #6941a5, #245c76); box-shadow: 0 18px 44px rgba(15,23,42,.3); }
 .heroEyebrow, .heroHint { display: block; color: rgba(255,255,255,.72); font-size: .82rem; }
 .heroEyebrow { margin-bottom: 8px; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; }
 .heroAmount { display: block; color: white; font-size: clamp(2rem, 5vw, 3.7rem); line-height: 1.05; letter-spacing: -.04em; }
