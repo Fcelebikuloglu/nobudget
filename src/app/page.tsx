@@ -120,6 +120,7 @@ export default function Home() {
   const [type, setType] = useState<"income" | "expense">("expense");
   const [date, setDate] = useState("");
   const [showEntryModal, setShowEntryModal] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   
   // Filter & Search State
   const [searchTerm, setSearchTerm] = useState("");
@@ -471,24 +472,25 @@ export default function Home() {
           <p>Your money, made easy.</p>
         </div>
         <div className={styles.actions}>
-          <div className={styles.accountChip} title={userEmail}>
-            <span className={styles.accountAvatar}>{(userEmail[0] || "M").toUpperCase()}</span>
-            <span className={styles.accountName}>{userEmail}</span>
+          <div className={styles.profileMenuWrap}>
+            <button className={styles.profileButton} onClick={() => setProfileOpen(!profileOpen)} aria-label="Open account menu" aria-expanded={profileOpen}>
+              <span className={styles.accountAvatar}>{(userEmail[0] || "M").toUpperCase()}</span>
+            </button>
+            {profileOpen && <div className={styles.profileMenu}>
+              <div className={styles.profileMenuEmail}>{userEmail}</div>
+              <label className={styles.menuSetting}>{copy.language}
+                <select value={language} onChange={(event) => setLanguage(event.target.value as "en" | "tr")}>
+                  <option value="en">English</option><option value="tr">Türkçe</option>
+                </select>
+              </label>
+              <label className={styles.menuSetting}>{copy.currency}
+                <select value={currency} onChange={(event) => setCurrency(event.target.value as "EUR" | "TRY")}>
+                  <option value="EUR">€ EUR</option><option value="TRY">₺ TRY</option>
+                </select>
+              </label>
+              <button className={`${styles.iconButton} ${styles.signOutButton}`} onClick={handleSignOut}>{copy.signOut}</button>
+            </div>}
           </div>
-          <span className={styles.preferenceDivider} aria-hidden="true" />
-          <label className={styles.settingControl}>{copy.language}
-            <select value={language} onChange={(event) => setLanguage(event.target.value as "en" | "tr")}>
-              <option value="en">English</option>
-              <option value="tr">Türkçe</option>
-            </select>
-          </label>
-          <label className={styles.settingControl}>{copy.currency}
-            <select value={currency} onChange={(event) => setCurrency(event.target.value as "EUR" | "TRY")}>
-              <option value="EUR">€ EUR</option>
-              <option value="TRY">₺ TRY</option>
-            </select>
-          </label>
-          <button className={`${styles.iconButton} ${styles.signOutButton}`} onClick={handleSignOut}>{copy.signOut}</button>
           <button className={styles.iconButton} onClick={handleExportData}>
             <span>📤</span> Export
           </button>
