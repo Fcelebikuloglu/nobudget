@@ -77,17 +77,26 @@
 
 @media (max-width: 768px) {
   .container { padding: 22px 14px 40px; gap: 16px; }
-  .header { align-items: flex-start; gap: 12px; }
+  .header { flex-direction: column; align-items: stretch; gap: 14px; }
   .titleArea h1 { font-size: 1.5rem; }
-  .titleArea p { font-size: 0.75rem; max-width: 220px; }
-  .actions { gap: 6px; }
-  .iconButton { padding: 8px 9px; font-size: 0.75rem; }
+  .titleArea p { font-size: 0.75rem; max-width: none; }
+  .actions { gap: 7px; flex-wrap: wrap; }
+  .userBadge { order: 3; width: 100%; max-width: none; }
+  .iconButton { padding: 9px 11px; font-size: 0.75rem; }
   .summaryGrid {
     grid-template-columns: 1fr;
   }
   .card { min-height: 116px; padding: 20px; }
   .cardValue { font-size: 1.75rem; margin: 8px 0 4px; }
   .glassPanel { padding: 20px; border-radius: 16px; }
+  .inputGroup { grid-template-columns: 1fr; gap: 14px; }
+  .chartLegend { grid-template-columns: 1fr; }
+  .budgetHeader { font-size: 0.78rem; gap: 10px; }
+  .budgetHeader span:last-child { text-align: right; }
+  .txItem { align-items: flex-start; gap: 10px; }
+  .txRight { margin-left: auto; gap: 8px; }
+  .txAmount { font-size: 0.85rem; }
+  .txMeta { flex-wrap: wrap; gap: 6px; }
 }
 
 .card {
