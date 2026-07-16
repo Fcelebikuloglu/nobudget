@@ -5,6 +5,7 @@ import { createClient } from "../../lib/supabase/client";
 import styles from "./auth.module.css";
 
 export default function AuthPage() {
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -22,9 +23,26 @@ export default function AuthPage() {
     }
 
     const supabase = createClient();
+    if (mode === "signup") {
+      const { data, error: signupError } = await supabase.auth.signUp({ email, password });
+      if (signupError) {
+        setError(signupError.message);
+        setLoading(false);
+        return;
+      }
+      if (!data.session) {
+        setError("Account created. Check your email to confirm your account, then sign in.");
+        setMode("signin");
+        setLoading(false);
+        return;
+      }
+      window.location.href = "/";
+      return;
+    }
+
     const { error: loginError } = await supabase.auth.signInWithPassword({ email, password });
     if (loginError) {
-      setError("Incorrect email or password.");
+      setError("Incorrect email or password. If you are new, create an account first.");
       setLoading(false);
       return;
     }
@@ -37,17 +55,20 @@ export default function AuthPage() {
       <section className={styles.authCard}>
         <div className={styles.logoMark}>G</div>
         <p className={styles.eyebrow}>PRIVATE FINANCE</p>
-        <h1>Welcome back</h1>
-        <p className={styles.subtitle}>Sign in to access your personal budget.</p>
+        <h1>{mode === "signin" ? "Welcome back" : "Create your account"}</h1>
+        <p className={styles.subtitle}>{mode === "signin" ? "Sign in to access your personal budget." : "Start your private budget in seconds."}</p>
         <form onSubmit={handleLogin} className={styles.form}>
           <label htmlFor="email">Email</label>
           <input id="email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
           <label htmlFor="password">Password</label>
           <input id="password" type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} required />
           {error && <p className={styles.error}>{error}</p>}
-          <button type="submit" disabled={loading}>{loading ? "Signing in…" : "Sign in"}</button>
+          <button type="submit" disabled={loading}>{loading ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}</button>
         </form>
-        <p className={styles.note}>Accounts are invite-only. Contact the owner for access.</p>
+        <button type="button" className={styles.modeButton} onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); }}>
+          {mode === "signin" ? "New here? Create an account" : "Already have an account? Sign in"}
+        </button>
+        <p className={styles.note}>Your budget is private and only visible to your account.</p>
       </section>
     </main>
   );
