@@ -343,7 +343,8 @@ export default function Home() {
     if (expenseData.length === 0) {
       return (
         <div className={styles.emptyState}>
-          <p>No expenses logged yet.</p>
+          <p>Nothing here yet—and that’s okay.</p>
+          <small>Add your first expense when you’re ready.</small>
         </div>
       );
     }
@@ -426,7 +427,7 @@ export default function Home() {
       <header className={styles.header}>
         <div className={styles.titleArea}>
           <h1>No Budget Plan</h1>
-          <p>Secure personal budget manager stored completely offline</p>
+          <p>A calm, simple place for all your money things.</p>
         </div>
         <div className={styles.actions}>
           <span className={styles.userBadge}>{userEmail}</span>
@@ -517,7 +518,8 @@ export default function Home() {
         <div className={styles.leftColumn}>
           {/* Logger Panel */}
           <section className={styles.glassPanel}>
-            <h3 className={styles.panelTitle}>Add Transaction</h3>
+            <h3 className={styles.panelTitle}>Add something</h3>
+            <p className={styles.panelIntro}>Start with your income, then add expenses as they happen. It only takes a few seconds.</p>
             <form onSubmit={handleAddTransaction} className={styles.form}>
               <div className={styles.inputGroup}>
                 <button
@@ -555,7 +557,7 @@ export default function Home() {
                 <input
                   id="description"
                   type="text"
-                  placeholder="e.g. Weekly Groceries"
+                  placeholder={type === "income" ? "e.g. Monthly salary" : "e.g. Coffee, rent, groceries"}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required
@@ -605,7 +607,7 @@ export default function Home() {
               )}
 
               <button type="submit" className={styles.submitBtn}>
-                Save Transaction
+                Add {type === "income" ? "income" : "expense"}
               </button>
             </form>
           </section>
@@ -715,7 +717,8 @@ export default function Home() {
             <div className={styles.listContainer}>
               {filteredTransactions.length === 0 ? (
                 <div className={styles.emptyState}>
-                  <p>No matching transactions found.</p>
+                  <p>No transactions to show yet.</p>
+                  <small>Your money story will appear here.</small>
                 </div>
               ) : (
                 filteredTransactions.map((tx) => (
